@@ -3,6 +3,7 @@ use axum::{
     http::StatusCode,
     Json, Router,
 };
+use serde::Deserialize;
 use serde_json::Value;
 use tracing::info;
 
@@ -31,9 +32,10 @@ async fn root() -> &'static str {
 }
 
 async fn uplink(
-    Json(payload): Json<Value>,
+    Json(payload): Json<Uplink>,
 ) -> StatusCode {
-    info!("Uplink json:\n{}", payload.to_string());
+    let payload = payload.uplink_message.decoded_payload;
+    info!("Decoded payload json:\n{}", payload.to_string());
 
     StatusCode::OK
 }
@@ -53,4 +55,15 @@ async fn location(
 
     StatusCode::OK
 }
+
+#[derive(Deserialize)]
+struct Uplink {
+    uplink_message: UplinkMessage,
+}
+
+#[derive(Deserialize)]
+struct UplinkMessage {
+    decoded_payload: Value,
+}
+
 
