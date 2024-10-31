@@ -34,8 +34,9 @@ async fn root() -> &'static str {
 async fn uplink(
     Json(payload): Json<Uplink>,
 ) -> StatusCode {
-    let payload = payload.uplink_message.decoded_payload;
-    info!("Decoded payload json:\n{}", payload.to_string());
+    let decoded = &payload.uplink_message.decoded_payload;
+    info!("Decoded payload json:\n{}", decoded);
+    info!("Entire payload json:\n{:?}", payload);
 
     StatusCode::OK
 }
@@ -56,12 +57,12 @@ async fn location(
     StatusCode::OK
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 struct Uplink {
     uplink_message: UplinkMessage,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 struct UplinkMessage {
     decoded_payload: Value,
 }
