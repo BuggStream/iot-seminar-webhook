@@ -1,0 +1,83 @@
+{
+  "name": "ns.down.data.schedule.attempt",
+  "time": "2024-11-20T12:12:37.655871548Z",
+  "identifiers": [
+    {
+      "device_ids": {
+        "device_id": "rak3244-pins",
+        "application_ids": {
+          "application_id": "rak3244"
+        },
+        "dev_eui": "60C5A8FFFE789DB8",
+        "dev_addr": "260BFBD6"
+      }
+    }
+  ],
+  "data": {
+    "@type": "type.googleapis.com/ttn.lorawan.v3.DownlinkMessage",
+    "raw_payload": "YNb7CyaAIAAA0ST0yknsN8DjIevIYj7VoOhT2lfWlEkv46LWy8QKxB9SoRTOww==",
+    "payload": {
+      "m_hdr": {
+        "m_type": "UNCONFIRMED_DOWN"
+      },
+      "mic": "oRTOww==",
+      "mac_payload": {
+        "f_hdr": {
+          "dev_addr": "260BFBD6",
+          "f_ctrl": {
+            "adr": true
+          },
+          "f_cnt": 32
+        },
+        "frm_payload": "0ST0yknsN8DjIevIYj7VoOhT2lfWlEkv46LWy8QKxB9S",
+        "full_f_cnt": 32
+      }
+    },
+    "request": {
+      "downlink_paths": [
+        {
+          "uplink_token": "CiIKIAoUZXVpLWE4NDA0MWZmZmYyMjc3ZjgSCKhAQf//Inf4EI2yj+8KGgsItaT3uQYQgOXncyDItZ+Q9IkZ"
+        }
+      ],
+      "rx1_delay": 1,
+      "rx1_data_rate": {
+        "lora": {
+          "bandwidth": 125000,
+          "spreading_factor": 12,
+          "coding_rate": "4/5"
+        }
+      },
+      "rx1_frequency": "868100000",
+      "rx2_data_rate": {
+        "lora": {
+          "bandwidth": 125000,
+          "spreading_factor": 12,
+          "coding_rate": "4/5"
+        }
+      },
+      "rx2_frequency": "869525000",
+      "priority": "HIGHEST",
+      "frequency_plan_id": "EU_863_870"
+    },
+    "correlation_ids": [
+      "gs:uplink:01JD4QT7ZVFC8J3CY6AV91J02W",
+      "ns:downlink:01JD4QT8CP8NE46MBXYCET7F7Z",
+      "ns:transmission:01JD4QT8CP3JZF6CJNJXMM2A88"
+    ]
+  },
+  "correlation_ids": [
+    "gs:uplink:01JD4QT7ZVFC8J3CY6AV91J02W",
+    "ns:downlink:01JD4QT8CP8NE46MBXYCET7F7Z",
+    "ns:transmission:01JD4QT8CP3JZF6CJNJXMM2A88"
+  ],
+  "origin": "ip-10-100-15-189.eu-west-1.compute.internal",
+  "context": {
+    "tenant-id": "CgN0dG4="
+  },
+  "visibility": {
+    "rights": [
+      "RIGHT_APPLICATION_TRAFFIC_READ"
+    ]
+  },
+  "unique_id": "01JD4QT8CQV8H7EW8D2BE83WGH"
+}
