@@ -65,6 +65,7 @@ struct Uplink {
 #[derive(Deserialize, Debug)]
 struct UplinkMessage {
     decoded_payload: Value,
+    rx_metadata: Value,
 }
 
 
