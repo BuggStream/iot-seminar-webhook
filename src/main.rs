@@ -34,6 +34,12 @@ async fn main() {
 // basic handler that responds with a static string
 async fn root() -> &'static str {
     info!("Received message at root");
+    if let Ok(url) = env::var("DATABASE_URL") {
+        info!("Database URL: {}", url);
+    } else {
+        info!("No database URL variable set");
+    }
+
     "Hello, World!"
 }
 
