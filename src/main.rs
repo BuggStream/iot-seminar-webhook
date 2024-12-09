@@ -1,3 +1,4 @@
+use std::env;
 use axum::{
     routing::{get, post},
     http::StatusCode,
@@ -5,12 +6,15 @@ use axum::{
 };
 use serde::Deserialize;
 use serde_json::Value;
+use tokio::net::TcpListener;
 use tracing::info;
 
 #[tokio::main]
 async fn main() {
     // initialize tracing
     tracing_subscriber::fmt::init();
+
+    let port = env::var("PORT").unwrap_or("3000".to_string());
 
     // build our application with a route
     let app = Router::new()
@@ -19,9 +23,11 @@ async fn main() {
         .route("/join", post(join))
         .route("/location", post(location));
 
+    let url = format!("0.0.0.0:{}", port);
+
     // run our app with hyper, listening globally on port 3000
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
-    info!("Listening on http://0.0.0.0:3000");
+    let listener = TcpListener::bind(&url).await.unwrap();
+    info!("Listening on {}", &url);
     axum::serve(listener, app).await.unwrap();
 }
 
