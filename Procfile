@@ -1,1 +1,1 @@
-web: ./target/release/hello
+web: ./target/release/iot-seminar-webhook

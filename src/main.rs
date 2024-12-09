@@ -27,7 +27,7 @@ async fn main() {
 
     // run our app with hyper, listening globally on port 3000
     let listener = TcpListener::bind(&url).await.unwrap();
-    info!("Listening on {}", &url);
+    info!("Listening on http://{}", &url);
     axum::serve(listener, app).await.unwrap();
 }
 
@@ -69,6 +69,7 @@ struct Uplink {
 }
 
 #[derive(Deserialize, Debug)]
+#[allow(dead_code)]
 struct UplinkMessage {
     decoded_payload: Value,
     rx_metadata: Value,
