@@ -6,7 +6,7 @@ use axum::{
 };
 use dotenv::dotenv;
 use serde::Deserialize;
-use serde_json::Value;
+use serde_json::{json, Value};
 use sqlx::postgres::PgPoolOptions;
 use sqlx::PgPool;
 use std::env;
@@ -52,7 +52,7 @@ async fn root(State(pool): State<PgPool>) -> Result<&'static str, (StatusCode, S
     info!("Received message at root");
 
     sqlx::query("INSERT INTO public.uplink(message) VALUES ($1)")
-        .bind(sqlx::types::Json("{}"))
+        .bind(json!({"id": 5, "name": "test"}))
         .execute(&pool)
         .await
         .map_err(database_error)?;
