@@ -1,6 +1,6 @@
 mod queries;
 
-use crate::queries::{store_uplink, uplink_count};
+use crate::queries::{store_join, store_location, store_uplink, uplink_count};
 use axum::extract::State;
 use axum::{
     http::StatusCode,
@@ -63,23 +63,30 @@ async fn uplink(
     State(pool): State<PgPool>,
     Json(payload): Json<Value>,
 ) -> Result<StatusCode, (StatusCode, String)> {
-    info!("Entire payload json:\n{:?}", payload);
-
+    info!("Uplink payload json:\n{:?}", payload);
     store_uplink(&pool, payload).await?;
 
     Ok(StatusCode::OK)
 }
 
-async fn join(Json(payload): Json<Value>) -> StatusCode {
-    info!("Join json:\n{}", payload.to_string());
+async fn join(
+    State(pool): State<PgPool>,
+    Json(payload): Json<Value>,
+) -> Result<StatusCode, (StatusCode, String)> {
+    info!("Join payload json:\n{:?}", payload);
+    store_join(&pool, payload).await?;
 
-    StatusCode::OK
+    Ok(StatusCode::OK)
 }
 
-async fn location(Json(payload): Json<Value>) -> StatusCode {
-    info!("Location json:\n{}", payload.to_string());
+async fn location(
+    State(pool): State<PgPool>,
+    Json(payload): Json<Value>,
+) -> Result<StatusCode, (StatusCode, String)> {
+    info!("Location payload json:\n{:?}", payload);
+    store_location(&pool, payload).await?;
 
-    StatusCode::OK
+    Ok(StatusCode::OK)
 }
 
 #[derive(Deserialize, Debug)]

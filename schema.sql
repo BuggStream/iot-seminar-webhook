@@ -21,6 +21,60 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: join; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."join" (
+    id bigint NOT NULL,
+    "timestamp" timestamp with time zone NOT NULL,
+    message json NOT NULL
+);
+
+
+ALTER TABLE public."join" OWNER TO postgres;
+
+--
+-- Name: join_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public."join" ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.join_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: location; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.location (
+    id bigint NOT NULL,
+    "timestamp" timestamp with time zone NOT NULL,
+    message json NOT NULL
+);
+
+
+ALTER TABLE public.location OWNER TO postgres;
+
+--
+-- Name: location_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.location ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.location_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: uplink; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -53,6 +107,22 @@ ALTER TABLE public.uplink ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 
 ALTER TABLE ONLY public.uplink
     ADD CONSTRAINT id PRIMARY KEY (id);
+
+
+--
+-- Name: join join_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."join"
+    ADD CONSTRAINT join_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: location location_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.location
+    ADD CONSTRAINT location_pkey PRIMARY KEY (id);
 
 
 --
