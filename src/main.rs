@@ -1,12 +1,15 @@
+mod queries;
+
+use crate::queries::{store_uplink, uplink_count};
 use axum::extract::State;
 use axum::{
     http::StatusCode,
     routing::{get, post},
     Json, Router,
 };
-use dotenv::dotenv;
+use dotenvy::dotenv;
 use serde::Deserialize;
-use serde_json::{json, Value};
+use serde_json::Value;
 use sqlx::postgres::PgPoolOptions;
 use sqlx::PgPool;
 use std::env;
@@ -48,31 +51,23 @@ async fn main() {
 }
 
 // basic handler that responds with a static string
-async fn root(State(pool): State<PgPool>) -> Result<&'static str, (StatusCode, String)> {
-    info!("Received message at root");
+async fn root(State(pool): State<PgPool>) -> Result<String, (StatusCode, String)> {
+    let count = uplink_count(&pool).await?;
+    let message = format!("Uplink count: {}", count);
+    info!("{}", &message);
 
-    sqlx::query("INSERT INTO public.uplink(message) VALUES ($1)")
-        .bind(json!({"id": 5, "name": "test"}))
-        .execute(&pool)
-        .await
-        .map_err(database_error)?;
-
-    let results = sqlx::query("SELECT * FROM uplink")
-        .fetch_all(&pool)
-        .await
-        .map_err(database_error)?;
-
-    info!("Results: {}", results.len());
-
-    Ok("Hello, World!")
+    Ok(message)
 }
 
-async fn uplink(Json(payload): Json<Uplink>) -> StatusCode {
-    let decoded = &payload.uplink_message.decoded_payload;
-    info!("Decoded payload json:\n{}", decoded);
+async fn uplink(
+    State(pool): State<PgPool>,
+    Json(payload): Json<Value>,
+) -> Result<StatusCode, (StatusCode, String)> {
     info!("Entire payload json:\n{:?}", payload);
 
-    StatusCode::OK
+    store_uplink(&pool, payload).await?;
+
+    Ok(StatusCode::OK)
 }
 
 async fn join(Json(payload): Json<Value>) -> StatusCode {
@@ -88,6 +83,7 @@ async fn location(Json(payload): Json<Value>) -> StatusCode {
 }
 
 #[derive(Deserialize, Debug)]
+#[allow(dead_code)]
 struct Uplink {
     uplink_message: UplinkMessage,
 }
