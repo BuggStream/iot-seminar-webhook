@@ -93,7 +93,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let mut path_buf = PathBuf::new();
     path_buf.push("datasets");
     fs::create_dir_all(path_buf.as_path())?;
-    path_buf.push(&format!("{}__{}.csv", start_naive, end_naive));
+    path_buf.push("friday.csv");
     let mut writer = Writer::from_path(path_buf.as_path())?;
 
     for (id, message) in messages {
