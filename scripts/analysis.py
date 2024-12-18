@@ -1,14 +1,4 @@
-
-
-if __name__ == '__main__':
-    print("hello")
-
-
-    import csv
-
-    # csv format:
-    # message_id, gateway_id, received_at, rx_lat, rx_lng, rssi, snr, gps_lat, gps_lng
-
+import csv
 
 # Placeholder for the filename
 filename = "placeholder.csv"

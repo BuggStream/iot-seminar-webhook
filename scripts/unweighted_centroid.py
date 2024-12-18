@@ -11,16 +11,15 @@ grouped = data.groupby("message_id")
 triangulated_positions = []
 
 centroid_lat_sum = 0
-centroid_lng_sum = 0 
+centroid_lng_sum = 0
 message_counter = 0
-
 
 for message_id, group in grouped:
     # Extract rx_lat and rx_lng for the current message_id
-    
+
     rx_lats = group["rx_lat"]
     rx_lngs = group["rx_lng"]
-    
+
     # Calculate the centroid
     centroid_lat = rx_lats.mean()
     centroid_lng = rx_lngs.mean()
@@ -29,11 +28,9 @@ for message_id, group in grouped:
     triangulated_positions.append({"message_id": message_id, "device_lat": centroid_lat, "device_lng": centroid_lng})
 
     centroid_lat_sum += centroid_lat
-    centroid_lng_sum += centroid_lng 
+    centroid_lng_sum += centroid_lng
 
     message_counter += 1
-    
-    
 
 # Create a new DataFrame with triangulated positions
 results_df = pd.DataFrame(triangulated_positions)
@@ -42,4 +39,4 @@ results_df = pd.DataFrame(triangulated_positions)
 results_df.to_csv("triangulated_positions.csv", index=False)
 print(results_df)
 # print("lat:%f long%f", centroid_lat_sum/message_counter, centroid_lng_sum/message_counter)
-print(f"lat:{centroid_lat_sum/message_counter:.6f} long:{centroid_lng_sum/message_counter:.6f}")
+print(f"lat:{centroid_lat_sum / message_counter:.6f} long:{centroid_lng_sum / message_counter:.6f}")
