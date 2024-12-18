@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Load the CSV file into a DataFrame
-file_path = "C:/Users/Sarthak/iot-seminar-webhook/datasets/friday.csv"  # Replace with your actual file path
+file_path = "datasets/friday.csv"  # Replace with your actual file path
 data = pd.read_csv(file_path)
 
 # Group data by message_id

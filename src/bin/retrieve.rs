@@ -32,8 +32,8 @@ struct LoraPayload {
     longitude: f64,
     #[serde(alias = "gpsUsedSats")]
     gps_satellites: u16,
-    #[serde(alias = "rxCount")]
-    rx_count: u64,
+    #[serde(alias = "txCount")]
+    tx_count: u64,
 }
 
 #[derive(Deserialize, Debug, Clone)]
@@ -67,7 +67,7 @@ struct CsvRow {
     rx_lng: f64,
     rssi: i64,
     snr: f64,
-    rx_count: u64,
+    tx_count: u64,
     satellites_used: u16,
     gps_lat: f64,
     gps_lng: f64,
@@ -93,16 +93,29 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let mut path_buf = PathBuf::new();
     path_buf.push("datasets");
     fs::create_dir_all(path_buf.as_path())?;
-    path_buf.push("friday.csv");
+    let filename = format!(
+        "friday_static_{}__{}.csv",
+        &start_naive.format("%Y-%m-%d_T%H-%M-%S").to_string(),
+        &end_naive.format("%Y-%m-%d_T%H-%M-%S").to_string()
+    );
+    path_buf.push(&filename);
     let mut writer = Writer::from_path(path_buf.as_path())?;
 
     for (id, message) in messages {
-        for gateway in message.uplink_message.rx_metadata.iter().filter_map(|x| x.clone()) {
+        for gateway in message
+            .uplink_message
+            .rx_metadata
+            .iter()
+            .filter_map(|x| x.clone())
+        {
             if gateway.location.is_none() {
                 continue;
             }
 
-            let gateway_id = gateway.gateway_ids.gateway_id.unwrap_or(String::from("anonymous"));
+            let gateway_id = gateway
+                .gateway_ids
+                .gateway_id
+                .unwrap_or(String::from("anonymous"));
             let location = gateway.location.unwrap();
             let row = CsvRow {
                 message_id: id,
@@ -112,7 +125,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 rx_lng: location.longitude,
                 rssi: gateway.rssi,
                 snr: gateway.snr.unwrap_or(f64::NAN),
-                rx_count: message.uplink_message.decoded_payload.rx_count,
+                tx_count: message.uplink_message.decoded_payload.tx_count,
                 satellites_used: message.uplink_message.decoded_payload.gps_satellites,
                 gps_lat: message.uplink_message.decoded_payload.latitude,
                 gps_lng: message.uplink_message.decoded_payload.longitude,
